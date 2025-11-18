@@ -30,8 +30,8 @@ export default defineConfig({
         theme_color: '#ffffff',
         background_color: '#ffffff',
         display: 'standalone',
-        scope: '/',
-        start_url: '/',
+        scope: '/react-pwa/',
+        start_url: '/react-pwa/',
         icons: [
           {
             src: 'pwa-192x192.png',
