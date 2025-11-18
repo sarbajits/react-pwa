@@ -25,7 +25,7 @@ export default defineConfig({
       manifest: {
         name: 'My React PWA',
         short_name: 'ReactPWA',
-        description: 'My awesome Progressive Web App!',
+        description: 'My awesome Progressive Web App built with Vite and React ! for testing',
         // You can find your theme_color in your tailwind.config.js
         theme_color: '#ffffff',
         background_color: '#ffffff',
@@ -51,6 +51,22 @@ export default defineConfig({
             purpose: 'maskable',
           },
         ],
+        "screenshots": [
+          {
+            "src": "https://media.istockphoto.com/id/814423752/photo/eye-of-model-with-colorful-art-make-up-close-up.jpg?s=612x612&w=0&k=20&c=l15OdMWjgCKycMMShP8UK94ELVlEGvt7GmB_esHWPYE=",
+            "sizes": "1280x720",
+            "type": "image/webp",
+            "form_factor": "wide",
+            "label": "Home screen showing main navigation and featured content"
+          },
+          {
+            "src": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ718nztPNJfCbDJjZG8fOkejBnBAeQw5eAUA&s",
+            "sizes": "1280x720",
+            "type": "image/webp",
+            "platform": "ios",
+            "label": "Dashboard view displaying key metrics"
+          }
+        ]
       },
     }),
   ],
