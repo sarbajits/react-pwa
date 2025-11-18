@@ -1,5 +1,7 @@
 // src/App.tsx
 
+import InstallPWAButton from "./InstallPWAButton";
+
 function App() {
   // This async function is much cleaner than nested .then()
   const handleNotificationClick = async () => {
@@ -65,6 +67,8 @@ function App() {
         <h1 className="text-3xl font-bold text-gray-900 text-center mb-3">
           PWA Notification Demo
         </h1>
+
+        <InstallPWAButton />
 
         <p className="text-gray-600 text-center text-lg mb-8">
           Click the button below to test local notifications. You will be
