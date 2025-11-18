@@ -1,51 +1,86 @@
-// src/App.tsx (or .jsx)
+// src/App.tsx
 
 function App() {
-  const showNotification = () => {
+  // This async function is much cleaner than nested .then()
+  const handleNotificationClick = async () => {
+    // 1. Check if notifications are supported
     if (!('Notification' in window)) {
-      alert('This browser does not support desktop notification');
+      alert('This browser does not support desktop notifications.');
       return;
     }
 
-    if (Notification.permission === 'granted') {
-      new Notification('Hello from your PWA!', {
-        body: 'This is a test notification.',
-        icon: '/pwa-192x192.png',
-        badge: '/pwa-192x192.png', // Icon for small spaces (like Android status bar)
-      });
-    } else if (Notification.permission !== 'denied') {
-      alert('Requesting notification permission...');
-      Notification.requestPermission().then((permission) => {
-        if (permission === 'granted') {
-          new Notification('Thanks for enabling notifications!', {
-            body: 'Now you will receive updates.',
-            icon: '/pwa-192x192.png',
-            badge: '/pwa-192x192.png',
-          });
-        }
-      });
+    // 2. Check the current permission status
+    let permission = Notification.permission;
+
+    // 3. If permission is 'default' (not yet asked), request it
+    if (permission === 'default') {
+      // This will pause the function until the user clicks "Allow" or "Block"
+      permission = await Notification.requestPermission();
+    }
+
+    // 4. If permission is 'denied', show a helpful alert
+    if (permission === 'denied') {
+      alert(
+        'You have denied notification permissions. Please enable them in your browser settings to receive reminders.',
+      );
+      return;
+    }
+
+    // 5. If permission is 'granted', show the notification
+    if (permission === 'granted') {
+      const notificationTitle = 'Task Reminder';
+      const notificationOptions = {
+        body: "Don't forget to complete your project report!",
+        // Use an absolute path for assets in the /public folder
+        icon: './pwa-192x192.png',
+        badge: './pwa-192x192.png',
+        // 'tag' ensures that if the user clicks 5 times,
+        // they only see one notification, which just updates.
+        tag: 'task-reminder',
+      };
+
+      // We don't need the disruptive 'alert' from your original code,
+      // the browser's permission prompt handles that.
+      new Notification(notificationTitle, notificationOptions);
     }
   };
 
   return (
-    <div className="text-6xl bg-blue-200 p-10 rounded-6xl">
-      <h1>Hello, World!</h1>
-      <img src="/pwa-192x192.png" alt="PWA Icon" className="w-32 h-32 mt-4" />
-      <img
-        src="https://images.unsplash.com/photo-1520209759809-a9bcb6cb3241?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1nfGVufDB8fDB8fHww&fm=jpg&q=60&w=3000"
-        alt="PWA Maskable Icon"
-        className="w-32 h-32 mt-4"
-      />
+    // Use a container to center the content on the page
+    <div className="min-h-screen bg-gray-100 p-4 flex items-center justify-center">
+      {/* Create a 'card' for a more meaningful UI */}
+      <div className="bg-white max-w-lg w-full p-8 shadow-xl rounded-2xl">
+        <div className="flex justify-center mb-6">
+          {/* POTENTIAL BUG FIX: 
+            Changed src from './pwa-192x192.png' to '/pwa-192x192.png'
+            This assumes the icon is in your /public folder, which is standard.
+          */}
+          <img
+            src="./pwa-192x192.png"
+            alt="PWA Icon"
+            className="w-24 h-24"
+          />
+        </div>
 
-      {/* --- ADD THIS BUTTON --- */}
-      <button
-        onClick={showNotification}
-        className="text-lg bg-indigo-600 text-white p-3 rounded-lg mt-6 active:bg-amber-400"
-      >
-        Show Notification
-      </button>
-      {/* --------------------- */}
+        <h1 className="text-3xl font-bold text-gray-900 text-center mb-3">
+          PWA Notification Demo
+        </h1>
 
+        <p className="text-gray-600 text-center text-lg mb-8">
+          Click the button below to test local notifications. You will be
+          asked for permission the first time.
+        </p>
+
+        <button
+          onClick={handleNotificationClick}
+          className="w-full text-lg font-semibold bg-indigo-600 text-white p-4 rounded-lg transition-colors duration-200
+                     hover:bg-indigo-700
+                     focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2
+                     active:bg-amber-400" // Kept your active: state!
+        >
+          Show Test Notification
+        </button>
+      </div>
     </div>
   );
 }
